@@ -18,4 +18,7 @@ RUN install_packages \
     apt-transport-https \
     vector
 
-CMD /usr/bin/vector
+COPY vector.toml /etc/vector/vector.toml
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT /entrypoint.sh

@@ -1,0 +1,20 @@
+# Ingest data by tailing one or more files
+[sources.miner_logs]
+type         = "file"
+include      = ["/var/log/miner/*.log"]    # supports globbing
+ignore_older = 86400                         # 1 day
+
+[transforms.logtail_transform_F2MUNaUf8pRKFJrWLrTr8M9C]
+type = "remap"
+inputs = [ "*" ]
+source = '''
+.dt = del(.timestamp)
+'''
+
+[sinks.logtail_http_sink]
+type = "http"
+inputs = [ "logtail_transform_F2MUNaUf8pRKFJrWLrTr8M9C" ]
+uri = "https://in.logtail.com/"
+encoding.codec = "json"
+auth.strategy = "bearer"
+auth.token = "LOGTAIL_TOKEN"
